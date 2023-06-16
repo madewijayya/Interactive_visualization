@@ -82,7 +82,7 @@ def update_plot_corr(attr, old, new):
     start_year = slider_start_year_corr.value
     end_year = slider_end_year_corr.value
 
-    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    
+    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih
     filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
     # Memperbarui data pada ColumnDataSource plot korelasi
@@ -100,6 +100,14 @@ select_area_corr2.on_change('value', update_plot_corr)
 slider_start_year_corr.on_change('value', update_plot_corr)
 slider_end_year_corr.on_change('value', update_plot_corr)
 
-# Menampilkan plot line dan plot korelasi
-st.bokeh_chart(column(plot_line, select_area_line, slider_start_year_line, slider_end_year_line))
-st.bokeh_chart(column(plot_corr, select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr))
+# Menyusun layout menggunakan Bokeh
+line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
+corr_layout = column(select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr, plot_corr)
+
+# Menghasilkan file HTML dari layout
+line_html = file_html(line_layout, CDN, "Line Plot")
+corr_html = file_html(corr_layout, CDN, "Correlation Plot")
+
+# Menampilkan file HTML pada Streamlit
+st.components.v1.html(line_html, height=500)
+st.components.v1.html(corr_html, height=500)
