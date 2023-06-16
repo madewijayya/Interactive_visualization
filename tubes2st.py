@@ -1,80 +1,105 @@
 import pandas as pd
-import streamlit as st
 from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource
-from bokeh.layouts import row
 from bokeh.models.widgets import Select, Slider
+from bokeh.embed import file_html
+from bokeh.resources import CDN
+import streamlit as st
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
 
-# Membuat ColumnDataSource awal
-source = ColumnDataSource(data=df)
+# Membuat ColumnDataSource awal untuk plot line
+source_line = ColumnDataSource(data=df)
 
-# Membuat plot awal
-plot = figure(title='Dataset Visualization',x_axis_label='Year', y_axis_label='Value',plot_height=400, plot_width=600)
+# Membuat plot line awal
+plot_line = figure(title='Dataset Visualization', x_axis_label='Year', y_axis_label='Value', plot_height=400, plot_width=600)
+line = plot_line.line(x='Year', y='Value', source=source_line, line_width=2)
+hover_tool_line = HoverTool(tooltips=[('Area', '@Area'), ('Year', '@Year'), ('Value', '@Value')])
+plot_line.add_tools(hover_tool_line)
 
-# Membuat glyph Line
-line = plot.line(x='Year', y='Value', source=source, line_width=2)
+# Membuat ColumnDataSource awal untuk plot korelasi
+source_corr = ColumnDataSource(data=df)
 
-# Membuat tooltips untuk HoverTool
-hover_tool = HoverTool(tooltips=[('Area', '@Area'), ('Year', '@Year'), ('Value', '@Value')])
+# Membuat plot korelasi awal
+plot_corr = figure(title='Correlation Plot', x_axis_label='Area 1', y_axis_label='Area 2', plot_height=400, plot_width=600)
+circle = plot_corr.circle(x='Value', y='Value', source=source_corr, size=8, color='navy', alpha=0.5)
+hover_tool_corr = HoverTool(tooltips=[('Area', '@Area'), ('Year', '@Year'), ('Value', '@Value')])
+plot_corr.add_tools(hover_tool_corr)
 
-# Menambahkan tooltips ke plot
-plot.add_tools(hover_tool)
+# Membaca tahun minimal dan maksimal dari dataset
+min_year = int(df['Year'].min())
+max_year = int(df['Year'].max())
 
-# Membuat dropdown untuk memilih area
-select_area = Select(title="Area", value=df['Area'].unique()[0], options=df['Area'].unique().tolist())
+# Membuat dropdown untuk memilih area pada plot line
+select_area_line = st.selectbox("Area", df['Area'].unique())
 
-# Membuat slider untuk memilih tahun
-slider_year = Slider(title="Year", start=df['Year'].min(),end=df['Year'].max(), value=df['Year'].min(), step=1)
+# Membuat slider untuk memilih rentang tahun pada plot line
+slider_start_year_line = st.slider("Start Year", min_value=min_year, max_value=max_year, value=min_year, step=1)
 
-# Mengupdate ColumnDataSource dan plot saat nilai dropdown atau slider berubah
-def update_data(attr, old, new):
-    selected_area = select_area.value
-    selected_year = slider_year.value
+# Membuat slider untuk memilih rentang tahun pada plot line
+slider_end_year_line = st.slider("End Year", min_value=min_year, max_value=max_year, value=max_year, step=1)
 
-    # Memfilter data sesuai dengan area dan tahun yang dipilih
-    filtered_data = df[(df['Area'] == selected_area) & (df['Year'] == selected_year)]
+# Mengupdate plot line saat nilai dropdown atau slider berubah
+def update_plot_line():
+    selected_area = select_area_line
+    start_year = slider_start_year_line
+    end_year = slider_end_year_line
 
-    # Memperbarui data pada ColumnDataSource
-    source.data = ColumnDataSource(filtered_data).data
+    # Memfilter data sesuai dengan area dan rentang tahun yang dipilih
+    filtered_data = df[(df['Area'] == selected_area) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
-    # Memperbarui label pada sumbu x dan y
-    plot.xaxis.axis_label = 'Year'
-    plot.yaxis.axis_label = 'Value'
+    # Memperbarui data pada ColumnDataSource plot line
+    source_line.data = filtered_data
 
-    # Memperbarui judul plot
-    plot.title.text = f"Data for {selected_area} - Year {selected_year}"
+    # Memperbarui label pada sumbu x dan y plot line
+    plot_line.xaxis.axis_label = 'Year'
+    plot_line.yaxis.axis_label = 'Value'
 
-# Membuat daftar negara yang tersedia untuk dropdown
-available_areas = df['Area'].unique().tolist()
+    # Memperbarui judul plot line
+    plot_line.title.text = f"Data for {selected_area} - Year {start_year} to {end_year}"
 
-# Membuat dictionary untuk menyimpan plot berdasarkan negara
-plots = {}
+    # Memperbarui plot korelasi
+    update_plot_corr()
 
-# Membuat plot untuk setiap negara
-for area in available_areas:
-    filtered_data = df[df['Area'] == area]
-    plots[area] = figure(title=f"Data for {area}",x_axis_label='Year', y_axis_label='Value',plot_height=400, plot_width=600)
-    plots[area].line(x='Year', y='Value', source=ColumnDataSource(filtered_data), line_width=2)
-    plots[area].add_tools(hover_tool)
+# Membuat dropdown untuk memilih negara 1 pada plot korelasi
+select_area_corr1 = st.selectbox("Area 1", df['Area'].unique())
 
-# Mengupdate plot yang ditampilkan saat nilai dropdown berubah
-def update_plot(attr, old, new):
-    selected_area = select_area.value
+# Membuat dropdown untuk memilih negara 2 pada plot korelasi
+select_area_corr2 = st.selectbox("Area 2", df['Area'].unique())
 
-    # Memperbarui plot yang ditampilkan
-    plot_layout.children[1] = plots[selected_area]
+# Membuat slider untuk memilih rentang tahun pada plot korelasi
+slider_start_year_corr = st.slider("Start Year", min_value=min_year, max_value=max_year, value=min_year, step=1)
 
-select_area.on_change('value', update_plot)
-slider_year.on_change('value', update_data)
+# Membuat slider untuk memilih rentang tahun pada plot korelasi
+slider_end_year_corr = st.slider("End Year", min_value=min_year, max_value=max_year, value=max_year, step=1)
 
-# Menyusun layout
-plot_layout = row(select_area, slider_year, plot)
+# Mengupdate plot korelasi saat nilai dropdown atau slider berubah
+def update_plot_corr():
+    selected_area1 = select_area_corr1
+    selected_area2 = select_area_corr2
+    start_year = slider_start_year_corr
+    end_year = slider_end_year_corr
 
-# Menampilkan plot pertama kali saat halaman dibuka
-update_data(None, None, None)
+    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    
+    filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
-# Menampilkan plot dan widget pada halaman Streamlit
-st.bokeh_chart(plot_layout)
+    # Memperbarui data pada ColumnDataSource plot korelasi
+    source_corr.data = filtered_data
+
+    # Memperbarui label pada sumbu x dan y plot korelasi
+    plot_corr.xaxis.axis_label = selected_area1
+    plot_corr.yaxis.axis_label = selected_area2
+
+    # Memperbarui judul plot korelasi
+    plot_corr.title.text = f"Correlation Plot: {selected_area1} vs {selected_area2} - Year {start_year} to {end_year}"
+
+# Memanggil fungsi update_plot_line dan update_plot_corr saat aplikasi Streamlit dijalankan
+update_plot_line()
+update_plot_corr()
+
+# Menampilkan plot line
+st.bokeh_chart(plot_line, use_container_width=True)
+
+# Menampilkan plot korelasi
+st.bokeh_chart(plot_corr, use_container_width=True)
