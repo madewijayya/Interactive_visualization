@@ -17,8 +17,8 @@ select_area_line = st.selectbox("Area", df['Area'].unique())
 # Membuat slider untuk memilih rentang tahun pada plot line
 min_year = int(df['Year'].min())
 max_year = int(df['Year'].max())
-start_year = st.slider("Start Year", min_year, max_year, min_value=min_year)
-end_year = st.slider("End Year", start_year, max_year, max_value=max_year)
+start_year = st.slider("Start Year", min_year, max_year, value=min_year)
+end_year = st.slider("End Year", start_year, max_year, value=max_year)
 
 # Memfilter data sesuai dengan area dan rentang tahun yang dipilih
 filtered_data_line = df[(df['Area'] == select_area_line) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
@@ -44,8 +44,8 @@ select_area_corr1 = st.selectbox("Area 1", df['Area'].unique())
 select_area_corr2 = st.selectbox("Area 2", df['Area'].unique())
 
 # Membaca slider untuk memilih rentang tahun pada plot korelasi
-start_year_corr = st.slider("Start Year (Correlation)", min_year, max_year, min_value=min_year)
-end_year_corr = st.slider("End Year (Correlation)", start_year_corr, max_year, max_value=max_year)
+start_year_corr = st.slider("Start Year (Correlation)", min_year, max_year, value=min_year)
+end_year_corr = st.slider("End Year (Correlation)", start_year_corr, max_year, value=max_year)
 
 # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    
 filtered_data_corr = df[((df['Area'] == select_area_corr1) | (df['Area'] == select_area_corr2)) & (df['Year'] >= start_year_corr) & (df['Year'] <= end_year_corr)]
