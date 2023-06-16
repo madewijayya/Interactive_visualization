@@ -100,15 +100,14 @@ slider_start_year_corr.on_change('value', update_plot_corr)
 slider_end_year_corr.on_change('value', update_plot_corr)
 
 # Menampilkan plot line dan kontrolnya
-line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
+st.bokeh_chart(plot_line, use_container_width=True)
+st.selectbox('Area', df['Area'].unique())
+st.slider('Select Start Year', min_value=min_year, max_value=max_year, value=min_year, step=1)
+st.slider('Select End Year', min_value=min_year, max_value=max_year, value=max_year, step=1)
 
 # Menampilkan plot korelasi dan kontrolnya
-corr_layout = column(select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr, plot_corr)
-
-# Mendapatkan komponen HTML dari plot line dan plot korelasi
-line_script, line_div = components(line_layout)
-corr_script, corr_div = components(corr_layout)
-
-# Menampilkan komponen HTML pada Streamlit
-st.components.v1.html(line_div + line_script)
-st.components.v1.html(corr_div + corr_script)
+st.bokeh_chart(plot_corr, use_container_width=True)
+st.selectbox('Area 1', df['Area'].unique())
+st.selectbox('Area 2', df['Area'].unique())
+st.slider('Select Start Year Correlation', min_value=min_year, max_value=max_year, value=min_year, step=1)
+st.slider('Select End Year Correlation', min_value=min_year, max_value=max_year, value=max_year, step=1)
