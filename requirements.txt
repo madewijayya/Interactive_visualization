@@ -1,2 +1,4 @@
 bokeh==2.4.3
 pandas==2.0.2
+matplotlib==3.3.4
+seaborn==0.10.1
