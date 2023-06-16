@@ -28,8 +28,8 @@ hover_tool_corr = HoverTool(tooltips=[('Area', '@Area'), ('Year', '@Year'), ('Va
 plot_corr.add_tools(hover_tool_corr)
 
 # Membaca tahun minimal dan maksimal dari dataset
-min_year = df['Year'].min()
-max_year = df['Year'].max()
+min_year = int(df['Year'].min())
+max_year = int(df['Year'].max())
 
 # Membuat dropdown untuk memilih area pada plot line
 select_area_line = st.selectbox("Area", df['Area'].unique())
