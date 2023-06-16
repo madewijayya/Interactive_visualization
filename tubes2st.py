@@ -78,7 +78,7 @@ def update_plot_corr():
     start_year = slider_start_year_corr.value
     end_year = slider_end_year_corr.value
 
-    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    
+    # Memfilter data sesuai dengan area dan rentang tahun yang dipilih
     filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
     # Memperbarui data pada ColumnDataSource plot korelasi
@@ -91,16 +91,16 @@ def update_plot_corr():
     # Memperbarui judul plot korelasi
     plot_corr.title.text = f"Correlation Plot: {selected_area1} vs {selected_area2} - Year {start_year} to {end_year}"
 
-# Menghubungkan fungsi update dengan perubahan pada dropdown dan slider
+# Menghubungkan callback function dengan event handler
 select_area_line.on_change('value', update_plot_line)
 slider_start_year_line.on_change('value', update_plot_line)
 slider_end_year_line.on_change('value', update_plot_line)
 
-select_area_corr1.on_change('value', lambda attr, old, new: update_plot_corr())
-select_area_corr2.on_change('value', lambda attr, old, new: update_plot_corr())
-slider_start_year_corr.on_change('value', lambda attr, old, new: update_plot_corr())
-slider_end_year_corr.on_change('value', lambda attr, old, new: update_plot_corr())
+select_area_corr1.on_change('value', update_plot_corr)
+select_area_corr2.on_change('value', update_plot_corr)
+slider_start_year_corr.on_change('value', update_plot_corr)
+slider_end_year_corr.on_change('value', update_plot_corr)
 
-# Menampilkan plot pada Streamlit
-st.bokeh_chart(plot_line)
-st.bokeh_chart(plot_corr)
+# Menampilkan plot line dan plot korelasi
+st.bokeh_chart(column(plot_line, select_area_line, slider_start_year_line, slider_end_year_line))
+st.bokeh_chart(column(plot_corr, select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr))
