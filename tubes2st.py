@@ -4,6 +4,7 @@ from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource, Select, Slider
 from bokeh.layouts import column
 import matplotlib.pyplot as plt
+import numpy as np
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
@@ -53,13 +54,10 @@ def update_plot_line(attr, old, new):
     # Memperbarui data pada ColumnDataSource plot line
     source_line.data = filtered_data
 
-    # Memperbarui label pada sumbu x dan y plot line
-    plot_line.xaxis.axis_label = 'Year'
-    plot_line.yaxis.axis_label = 'Value'
-
     # Memperbarui judul plot line
     plot_line.title.text = f'Dataset Visualization - {selected_area} - Year {start_year} to {end_year}'
 
+# Menambahkan callback ke dropdown dan slider plot line
 select_area_line.on_change('value', update_plot_line)
 slider_start_year_line.on_change('value', update_plot_line)
 slider_end_year_line.on_change('value', update_plot_line)
@@ -68,10 +66,10 @@ slider_end_year_line.on_change('value', update_plot_line)
 line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
 st.bokeh_chart(line_layout, use_container_width=True)
 
-# Membuat dropdown untuk memilih negara 1 pada plot korelasi
+# Membuat dropdown untuk memilih area 1 pada plot korelasi
 select_area_corr1 = Select(title="Area 1", value=df['Area'].unique()[0], options=df['Area'].unique().tolist())
 
-# Membuat dropdown untuk memilih negara 2 pada plot korelasi
+# Membuat dropdown untuk memilih area 2 pada plot korelasi
 select_area_corr2 = Select(title="Area 2", value=df['Area'].unique()[1], options=df['Area'].unique().tolist())
 
 # Membuat slider untuk memilih rentang tahun pada plot korelasi
@@ -85,7 +83,7 @@ def update_plot_corr(attr, old, new):
     start_year = slider_start_year_corr.value
     end_year = slider_end_year_corr.value
 
-    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih
+    # Memfilter data sesuai dengan area 1, area 2, dan rentang tahun yang dipilih
     filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
     # Memperbarui data pada ColumnDataSource plot korelasi
@@ -98,6 +96,7 @@ def update_plot_corr(attr, old, new):
     # Memperbarui judul plot korelasi
     plot_corr.title.text = f'Correlation Plot: {selected_area1} vs {selected_area2} - Year {start_year} to {end_year}'
 
+# Menambahkan callback ke dropdown dan slider plot korelasi
 select_area_corr1.on_change('value', update_plot_corr)
 select_area_corr2.on_change('value', update_plot_corr)
 slider_start_year_corr.on_change('value', update_plot_corr)
