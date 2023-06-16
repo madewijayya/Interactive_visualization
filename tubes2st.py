@@ -5,6 +5,7 @@ from bokeh.layouts import column
 from bokeh.models import Select, Slider
 from bokeh.embed import file_html
 from bokeh.resources import CDN
+import streamlit as st
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
