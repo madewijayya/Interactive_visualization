@@ -4,7 +4,10 @@ from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.layouts import column
 from bokeh.models import Select, Slider
 import streamlit as st
-from bokeh.io import curdoc
+from bokeh.models import Plot, Range1d
+from bokeh.models.callbacks import CustomJS
+from bokeh.embed import json_item
+import json
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
@@ -103,6 +106,10 @@ slider_end_year_corr.on_change('value', update_plot_corr)
 line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
 corr_layout = column(select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr, plot_corr)
 
-# Menampilkan plot pada Streamlit menggunakan st.bokeh_chart
-st.bokeh_chart(line_layout, use_container_width=True)
-st.bokeh_chart(corr_layout, use_container_width=True)
+# Mengonversi plot menjadi JSON menggunakan JSON Item
+line_json = json.dumps(json_item(line_layout, "line_plot"))
+corr_json = json.dumps(json_item(corr_layout, "corr_plot"))
+
+# Menampilkan plot pada Streamlit menggunakan st.components.v1.html
+st.components.v1.html(f'<script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js"></script><script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js"></script><div id="line_plot">{line_json}</div>', height=500)
+st.components.v1.html(f'<script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.3.3.min.js"></script><script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.3.3.min.js"></script><div id="corr_plot">{corr_json}</div>', height=500)
