@@ -99,19 +99,15 @@ select_area_corr2.on_change('value', update_plot_corr)
 slider_start_year_corr.on_change('value', update_plot_corr)
 slider_end_year_corr.on_change('value', update_plot_corr)
 
-# Menyusun layout menggunakan Streamlit
-st.title("Data Visualization with Bokeh and Streamlit")
-
 # Menampilkan plot line dan kontrolnya
-line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
+st.bokeh_chart(plot_line, use_container_width=True)
+st.selectbox('Select Area', options=df['Area'].unique().tolist())
+st.slider('Select Start Year', min_value=min_year, max_value=max_year, value=min_year, step=1)
+st.slider('Select End Year', min_value=min_year, max_value=max_year, value=max_year, step=1)
 
 # Menampilkan plot korelasi dan kontrolnya
-corr_layout = column(select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr, plot_corr)
-
-# Mendapatkan komponen HTML dari plot line dan plot korelasi
-line_script, line_div = components(line_layout)
-corr_script, corr_div = components(corr_layout)
-
-# Menampilkan komponen HTML pada Streamlit
-st.components.v1.html(line_div + line_script)
-st.components.v1.html(corr_div + corr_script)
+st.bokeh_chart(plot_corr, use_container_width=True)
+st.selectbox('Select Area 1', options=df['Area'].unique().tolist())
+st.selectbox('Select Area 2', options=df['Area'].unique().tolist())
+st.slider('Select Start Year', min_value=min_year, max_value=max_year, value=min_year, step=1)
+st.slider('Select End Year', min_value=min_year, max_value=max_year, value=max_year, step=1)
