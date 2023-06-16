@@ -4,7 +4,6 @@ from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.layouts import column
 from bokeh.models import Select, Slider
-from streamlit.bokehview import bokeh_chart
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
