@@ -39,8 +39,8 @@ max_year = int(max_year)
 select_area_line = Select(title="Area", value=df['Area'].unique()[0], options=df['Area'].unique().tolist())
 
 # Membuat slider untuk memilih rentang tahun pada plot line
-slider_start_year_line = st.slider('Select Start Year', min_value=min_year, max_value=max_year, value=min_year, step=1)
-slider_end_year_line = st.slider('Select End Year', min_value=min_year, max_value=max_year, value=max_year, step=1)
+slider_start_year_line = st.slider('Select Start Year Line', min_value=min_year, max_value=max_year, value=min_year, step=1)
+slider_end_year_line = st.slider('Select End Year Line', min_value=min_year, max_value=max_year, value=max_year, step=1)
 
 # Mengupdate plot line saat nilai dropdown atau slider berubah
 def update_plot_line(attr, old, new):
@@ -73,8 +73,8 @@ select_area_corr1 = Select(title="Area 1", value=df['Area'].unique()[0], options
 select_area_corr2 = Select(title="Area 2", value=df['Area'].unique()[1], options=df['Area'].unique().tolist())
 
 # Membuat slider untuk memilih rentang tahun pada plot korelasi
-slider_start_year_corr = st.slider('Select Start Year', min_value=min_year, max_value=max_year, value=min_year, step=1)
-slider_end_year_corr = st.slider('Select End Year', min_value=min_year, max_value=max_year, value=max_year, step=1)
+slider_start_year_corr = st.slider('Select Start Year Correlation', min_value=min_year, max_value=max_year, value=min_year, step=1)
+slider_end_year_corr = st.slider('Select End Year Correlation', min_value=min_year, max_value=max_year, value=max_year, step=1)
 
 # Mengupdate plot korelasi saat nilai dropdown atau slider berubah
 def update_plot_corr(attr, old, new):
