@@ -96,10 +96,10 @@ select_area_line.on_change('value', update_plot_line)
 slider_start_year_line.on_change('value', update_plot_line)
 slider_end_year_line.on_change('value', update_plot_line)
 
-select_area_corr1.on_change('value', update_plot_corr)
-select_area_corr2.on_change('value', update_plot_corr)
-slider_start_year_corr.on_change('value', update_plot_corr)
-slider_end_year_corr.on_change('value', update_plot_corr)
+select_area_corr1.on_change('value', lambda attr, old, new: update_plot_corr())
+select_area_corr2.on_change('value', lambda attr, old, new: update_plot_corr())
+slider_start_year_corr.on_change('value', lambda attr, old, new: update_plot_corr())
+slider_end_year_corr.on_change('value', lambda attr, old, new: update_plot_corr())
 
 # Menampilkan plot pada Streamlit
 st.bokeh_chart(plot_line)
