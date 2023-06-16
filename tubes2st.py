@@ -80,9 +80,8 @@ def update_plot_corr(attr, old, new):
     start_year = slider_start_year_corr.value
     end_year = slider_end_year_corr.value
 
-    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) &
-                       (df['Year'] >= start_year) &
-                       (df['Year'] <= end_year)]
+    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    
+    filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
     # Memperbarui data pada ColumnDataSource plot korelasi
     source_corr.data = filtered_data
