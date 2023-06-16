@@ -1,4 +1,4 @@
-[10:48 am, 15/06/2023] jaya: import pandas as pd
+import pandas as pd
 from bokeh.plotting import figure, curdoc
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.layouts import widgetbox, row
