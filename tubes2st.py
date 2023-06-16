@@ -1,10 +1,10 @@
-import streamlit as st
 import pandas as pd
 from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.layouts import column
 from bokeh.models import Select, Slider
-from bokeh.embed import components
+from bokeh.embed import file_html
+from bokeh.resources import CDN
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
@@ -99,19 +99,14 @@ select_area_corr2.on_change('value', update_plot_corr)
 slider_start_year_corr.on_change('value', update_plot_corr)
 slider_end_year_corr.on_change('value', update_plot_corr)
 
-# Menyusun layout menggunakan Streamlit
-st.title("Data Visualization with Bokeh and Streamlit")
-
-# Menampilkan plot line dan kontrolnya
+# Menyusun layout menggunakan Bokeh
 line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
-
-# Menampilkan plot korelasi dan kontrolnya
 corr_layout = column(select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr, plot_corr)
 
-# Mendapatkan komponen HTML dari plot line dan plot korelasi
-line_script, line_div = components(line_layout)
-corr_script, corr_div = components(corr_layout)
+# Menghasilkan file HTML dari layout
+line_html = file_html(line_layout, CDN, "Line Plot")
+corr_html = file_html(corr_layout, CDN, "Correlation Plot")
 
-# Menampilkan komponen HTML pada Streamlit
-st.components.v1.html(line_div + line_script)
-st.components.v1.html(corr_div + corr_script)
+# Menampilkan file HTML pada Streamlit
+st.components.v1.html(line_html, height=500)
+st.components.v1.html(corr_html, height=500)
