@@ -64,6 +64,10 @@ select_area_line.on_change('value', update_plot_line)
 slider_start_year_line.on_change('value', update_plot_line)
 slider_end_year_line.on_change('value', update_plot_line)
 
+# Menampilkan plot line dan kontrolnya
+line_layout = column(select_area_line, slider_start_year_line, slider_end_year_line, plot_line)
+st.bokeh_chart(line_layout, use_container_width=True)
+
 # Membuat dropdown untuk memilih negara 1 pada plot korelasi
 select_area_corr1 = Select(title="Area 1", value=df['Area'].unique()[0], options=df['Area'].unique().tolist())
 
@@ -81,7 +85,7 @@ def update_plot_corr(attr, old, new):
     start_year = slider_start_year_corr.value
     end_year = slider_end_year_corr.value
 
-    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih    
+    # Memfilter data sesuai dengan negara 1, negara 2, dan rentang tahun yang dipilih
     filtered_data = df[((df['Area'] == selected_area1) | (df['Area'] == selected_area2)) & (df['Year'] >= start_year) & (df['Year'] <= end_year)]
 
     # Memperbarui data pada ColumnDataSource plot korelasi
@@ -99,15 +103,6 @@ select_area_corr2.on_change('value', update_plot_corr)
 slider_start_year_corr.on_change('value', update_plot_corr)
 slider_end_year_corr.on_change('value', update_plot_corr)
 
-# Menampilkan plot line dan kontrolnya
-st.bokeh_chart(plot_line, use_container_width=True)
-st.selectbox('Area', df['Area'].unique())
-st.slider('Select Start Year', min_value=min_year, max_value=max_year, value=min_year, step=1)
-st.slider('Select End Year', min_value=min_year, max_value=max_year, value=max_year, step=1)
-
 # Menampilkan plot korelasi dan kontrolnya
-st.bokeh_chart(plot_corr, use_container_width=True)
-st.selectbox('Area 1', df['Area'].unique())
-st.selectbox('Area 2', df['Area'].unique())
-st.slider('Select Start Year Correlation', min_value=min_year, max_value=max_year, value=min_year, step=1)
-st.slider('Select End Year Correlation', min_value=min_year, max_value=max_year, value=max_year, step=1)
+corr_layout = column(select_area_corr1, select_area_corr2, slider_start_year_corr, slider_end_year_corr, plot_corr)
+st.bokeh_chart(corr_layout, use_container_width=True)
