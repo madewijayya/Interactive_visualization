@@ -3,7 +3,7 @@ import pandas as pd
 from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource, Select, Slider
 from bokeh.layouts import column
-from bokeh.embed import components
+import matplotlib.pyplot as plt
 
 # Membaca data
 df = pd.read_csv('dataset2.csv')
@@ -58,7 +58,7 @@ def update_plot_line(attr, old, new):
     plot_line.yaxis.axis_label = 'Value'
 
     # Memperbarui judul plot line
-    plot_line.title.text = f"Data for {selected_area} - Year {start_year} to {end_year}"
+    plot_line.title.text = f'Dataset Visualization - {selected_area} - Year {start_year} to {end_year}'
 
 select_area_line.on_change('value', update_plot_line)
 slider_start_year_line.on_change('value', update_plot_line)
@@ -96,7 +96,7 @@ def update_plot_corr(attr, old, new):
     plot_corr.yaxis.axis_label = selected_area2
 
     # Memperbarui judul plot korelasi
-    plot_corr.title.text = f"Correlation Plot: {selected_area1} vs {selected_area2} - Year {start_year} to {end_year}"
+    plot_corr.title.text = f'Correlation Plot: {selected_area1} vs {selected_area2} - Year {start_year} to {end_year}'
 
 select_area_corr1.on_change('value', update_plot_corr)
 select_area_corr2.on_change('value', update_plot_corr)
