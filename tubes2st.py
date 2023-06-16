@@ -1,29 +1,4 @@
 import pandas as pd
-from bokeh.plotting import figure, curdoc
-from bokeh.models import HoverTool, ColumnDataSource
-from bokeh.layouts import widgetbox, row
-from bokeh.models import Select, Slider
-
-# Membaca data
-df = pd.read_csv('dataset2.csv')
-
-# Membuat ColumnDataSource awal
-source = ColumnDataSource(data=df)
-
-# Membuat plot awal
-plot = figure(title='Dataset Visualization', x_axis_label='Year', y_axis_label='Value', plot_height=400, plot_width=600)
-
-# Membuat glyph Line
-line = plot.line(x='Year', y='Value', source=source, line_width=2)
-
-# Membuat tooltips untuk HoverTool
-hover_tool = HoverTool(tooltips=[('Area', '@Area'), ('Year', '@Year'), ('Value', '@Value')])
-
-# Menambahkan tooltips ke plot
-plot.add_tools(hover_tool)
-
-# Membuat dropdown untuk memilih ar…
-[9:39 am, 16/06/2023] jaya: import pandas as pd
 from bokeh.plotting import figure
 from bokeh.models import HoverTool, ColumnDataSource
 from bokeh.layouts import column
